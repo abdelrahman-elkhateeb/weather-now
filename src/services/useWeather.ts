@@ -1,13 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { getWeatherData } from "./weatherApi";
 
-export function useWeather(lat: number | undefined, lng: number | undefined) {
+export function useWeather() {
 
-  const { isPending, data, error } = useQuery({
-    queryKey: ["weather", lat, lng],
-    queryFn: () => getWeatherData(lat!, lng!),
-    enabled: lat !== undefined && lng !== undefined
+  const { mutate, data, isPending, error } = useMutation({
+    mutationFn: ({ lat, lng }: { lat: number; lng: number }) => getWeatherData(lat, lng),
   })
 
-  return { isPending, data, error }
+  return { fetchWeatherData: mutate, isPending, data, error }
 }

@@ -1,12 +1,58 @@
+import { useSearchLocation } from "@/hooks/useSearchLocation";
+import type { ILocalCity } from "@/types/cityTypes";
 import { Button } from "./ui/button";
+import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "./ui/combobox";
 import { Field } from "./ui/field";
-import { Input } from "./ui/input";
 
 export default function SearchBar() {
+
+  const {
+    cityName,
+    setCityName,
+    setIsSelected,
+    citiesData,
+    handleSearchSubmit,
+    handleCitySelect,
+  } = useSearchLocation();
+
   return (
-    <Field orientation="horizontal">
-      <Input type="search" placeholder="Search for a place..." />
-      <Button>Search</Button>
-    </Field>
+    <Combobox items={citiesData}>
+      <Field orientation="horizontal">
+        <ComboboxInput
+          name="cityName"
+          value={cityName}
+          onChange={e => {
+            setCityName(e.target.value);
+            setIsSelected(false);
+          }}
+          type="search"
+          placeholder="Search for a place..."
+        />
+        <Button
+          type="button"
+          onClick={handleSearchSubmit}
+        >
+          Search
+        </Button>
+      </Field>
+
+      <ComboboxContent>
+        <ComboboxEmpty>No items found.</ComboboxEmpty>
+        <ComboboxList>
+          {(city: ILocalCity) => {
+            const itemLabel = `${city.name}, ${city.country}`;
+            return (
+              <ComboboxItem
+                key={`${city.lat}-${city.lng}`}
+                value={itemLabel}
+                onClick={() => handleCitySelect(city)}
+              >
+                {itemLabel}
+              </ComboboxItem>
+            )
+          }}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   )
 }
