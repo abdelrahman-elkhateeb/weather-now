@@ -1,45 +1,70 @@
 import { useGeoCode } from "@/services/useGeoCode";
 import { useWeather } from "@/services/useWeather";
 import type { ICity, ILocalCity } from "@/types/cityTypes";
-import { useState } from "react";
+import { useSearchStore } from "@/stores/useSearchStore";
+import { useMemo } from "react";
 
 export function useSearchLocation() {
-  const [cityName, setCityName] = useState("");
-  const [coordinates, setCoordinates] = useState<{ lat: number, lng: number } | null>(null);
-  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const {
+    cityName,
+    setCityName,
+    isSelected,
+    setIsSelected,
+    selectedCoordinates,
+    setSelectedCoordinates,
+    reset,
+  } = useSearchStore();
 
+  // GEO API
   const { data: location } = useGeoCode(cityName, isSelected);
-  const { fetchWeatherData } = useWeather();
 
+  // WEATHER API (server state)
+  const { data: cityData, isPending: isCityDataLoading } = useWeather(
+    selectedCoordinates?.lat,
+    selectedCoordinates?.lng
+  );
+
+  // normalize geo results
+  const citiesData: ILocalCity[] = useMemo(() => {
+    return (
+      location?.map((city: ICity) => ({
+        name: city.name,
+        country: city.country,
+        lat: city.latitude,
+        lng: city.longitude,
+      })) || []
+    );
+  }, [location]);
 
   function handleSearchSubmit() {
-    if (coordinates) {
-      fetchWeatherData({ lat: coordinates.lat, lng: coordinates.lng });
-    }
-  }
-
-  function handleCitySelect(city: ILocalCity) {
-    const itemLabel = `${city.name}, ${city.country}`;
-    setCoordinates({ lat: city.lat, lng: city.lng });
-    setCityName(itemLabel);
+    if (!selectedCoordinates) return;
     setIsSelected(true);
   }
 
+  function handleCitySelect(city: ILocalCity) {
+    setSelectedCoordinates({ lat: city.lat, lng: city.lng });
+    setCityName(`${city.name}, ${city.country}`);
+    setIsSelected(true);
+  }
 
-  const citiesData: ILocalCity[] = location?.map((city: ICity) => ({
-    name: city.name,
-    country: city.country,
-    lat: city.latitude,
-    lng: city.longitude
-  })) || [];
-
+  function handleReset() {
+    reset();
+  }
 
   return {
+    // state
     cityName,
-    setCityName,
-    setIsSelected,
+    isSelected,
     citiesData,
+
+    // actions
+    setCityName,
     handleSearchSubmit,
     handleCitySelect,
+    handleReset,
+
+    // server state
+    cityData,
+    isCityDataLoading,
   };
 }

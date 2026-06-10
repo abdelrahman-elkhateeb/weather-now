@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getWeatherData } from "./weatherApi";
 
-export function useWeather() {
-
-  const { mutate, data, isPending, error } = useMutation({
-    mutationFn: ({ lat, lng }: { lat: number; lng: number }) => getWeatherData(lat, lng),
-  })
-
-  return { fetchWeatherData: mutate, isPending, data, error }
+export function useWeather(lat?: number, lng?: number) {
+  return useQuery({
+    queryKey: ["weather", lat, lng],
+    queryFn: () => getWeatherData(lat!, lng!),
+    enabled: !!lat && !!lng,
+    staleTime: 60000
+  });
 }
