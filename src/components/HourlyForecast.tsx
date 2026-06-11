@@ -1,10 +1,16 @@
+import { useWeatherViewModel } from "@/hooks/useWeatherViewModel";
 import { ChevronDown } from "lucide-react";
+import { Card, CardContent } from "./ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
-import img from "@/assets/icon-fog.webp";
 
+type IHour = {
+  icon: string,
+  time: Date,
+  temperature: number
+}
 
 export default function HourlyForecast() {
+  const { hourly } = useWeatherViewModel();
 
   return (
     <div>
@@ -46,48 +52,17 @@ export default function HourlyForecast() {
       </div>
 
       <div>
-        <Card className="flex">
-          <CardHeader>
-            <img src={img} alt="img" />
-          </CardHeader>
-          <CardContent> 3PM</CardContent>
-          <CardFooter>20 </CardFooter>
-        </Card>
-        <Card className="flex items-center">
-          <CardHeader>
-            <img src={img} alt="img" />
-          </CardHeader>
-          <CardContent> 3PM</CardContent>
-          <CardFooter>20 </CardFooter>
-        </Card>
-        <Card className="flex items-center">
-          <CardHeader>
-            <img src={img} alt="img" />
-          </CardHeader>
-          <CardContent> 3PM</CardContent>
-          <CardFooter>20 </CardFooter>
-        </Card>
-        <Card className="flex items-center">
-          <CardHeader>
-            <img src={img} alt="img" />
-          </CardHeader>
-          <CardContent> 3PM</CardContent>
-          <CardFooter>20 </CardFooter>
-        </Card>
-        <Card className="flex items-center">
-          <CardHeader>
-            <img src={img} alt="img" />
-          </CardHeader>
-          <CardContent> 3PM</CardContent>
-          <CardFooter>20 </CardFooter>
-        </Card>
-        <Card className="flex items-center">
-          <CardHeader>
-            <img src={img} alt="img" />
-          </CardHeader>
-          <CardContent> 3PM</CardContent>
-          <CardFooter>20 </CardFooter>
-        </Card>
+        {hourly.map((hour: IHour, i: number) => (
+          <Card key={i}>
+            <CardContent className="flex items-center justify-between">
+              <div className="w-10">
+                <img src={hour.icon} alt="img" className="w-full" />
+              </div>
+              <p>{`${hour.time} PM`}</p>
+              <span>{`${hour.temperature} °C`}</span>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   )

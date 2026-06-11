@@ -1,4 +1,4 @@
-import type { WeatherCondition } from "@/types/weatherIconMap";
+import type { WeatherCondition } from "@/types/weatherIconMapTypes";
 
 export function mapWeatherCode(code: number): WeatherCondition {
   if (code === 0) return "sunny";

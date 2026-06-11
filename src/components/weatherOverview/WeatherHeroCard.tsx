@@ -1,42 +1,24 @@
-import { useWeather } from "@/services/useWeather";
-import { useSearchStore } from "@/stores/useSearchStore";
-import { weatherIconMap } from "@/types/weatherIconMap";
-import { mapWeatherCode } from "@/utils/weatherCodeMap";
-import { format } from "date-fns";
+import { useWeatherViewModel } from "@/hooks/useWeatherViewModel";
 
 export default function WeatherHeroCard() {
-  const { selectedCoordinates, cityName } = useSearchStore();
 
-  const { data, isPending } = useWeather(
-    selectedCoordinates?.lat,
-    selectedCoordinates?.lng
-  );
-  const rawDate = data?.current?.time;
-
-  const formattedDate = rawDate
-    ? format(new Date(rawDate), "EEEE, MMM d, yyyy")
-    : "";
-
-  const weatherCode = data?.current?.weather_code;
-  const condition = mapWeatherCode(weatherCode);
-  const icon = weatherIconMap[condition];
-  const temperature = data?.current?.temperature_2m;
+  const { current, isLoading } = useWeatherViewModel();
 
   return (
     <div className="flex justify-between">
       <div>
         <h2>
-          {cityName}
+          {current?.cityName}
         </h2>
-        <p>{formattedDate}</p>
+        <p>{current?.date}</p>
       </div>
 
       <div className="flex">
         <div>
-          <img src={icon} alt="sun" />
+          <img src={current?.icon} alt="sun" />
         </div>
         <span>
-          {temperature}
+          {current?.temperature}
         </span>
       </div>
     </div>

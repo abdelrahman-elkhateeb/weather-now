@@ -1,41 +1,48 @@
+import { useWeatherViewModel } from "@/hooks/useWeatherViewModel"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 
-const data = [
-  {
-    "title": "feels like",
-    "metric": "18°"
-  },
-  {
-    "title": "humidity",
-    "metric": "46%"
-  },
-  {
-    "title": "wind",
-    "metric": "14 km/h"
-  },
-  {
-    "title": "precipitation",
-    "metric": "0 mm"
-  }
-]
-
 export default function MetricsCard() {
+  const { current, isLoading } = useWeatherViewModel();
+
+  if (isLoading || !current) {
+    return (
+      <div className="flex gap-3">
+        <p className="text-muted-foreground animate-pulse">Loading weather metrics...</p>
+      </div>
+    );
+  }
+
+
+  const { feelsLike, humidity, wind, precipitation } = current as {
+    feelsLike: number;
+    humidity: number;
+    wind: number;
+    precipitation: number;
+  };;
+
+  const todayForecast = {
+    "Feels Like": `${feelsLike}°C`,
+    "Humidity": `${humidity}%`,
+    "Wind": `${wind} km/h`,
+    "Precipitation": `${precipitation} mm`
+  };
+
   return (
     <div className="flex gap-3">
-      {
-        data.map((card, i) => (
-          <Card key={i} className="">
-            <CardHeader>
-              <CardTitle>
-                {card.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {card.metric}
-            </CardContent>
-          </Card>
-        ))
-      }
+      {Object.entries(todayForecast).map(([key, value]) => (
+        <Card key={key} className="">
+          <CardHeader>
+            <CardTitle className="">
+              {key}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="">
+              {value}
+            </p>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   )
 }

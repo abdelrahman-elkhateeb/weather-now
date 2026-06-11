@@ -1,68 +1,28 @@
+import { useWeatherViewModel } from "@/hooks/useWeatherViewModel"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import type { IDaily } from "@/types/DailyTypes";
 
-const data = [
-  {
-    "day": "Tue",
-    "met1": "68°",
-    "img": "../../assets/icon-overcast.webp",
-    "met2": "57°"
-  },
-  {
-    "day": "Tue",
-    "met1": "68°",
-    "img": "@/assets/icon-overcast.webp",
-    "met2": "57°"
-  },
-  {
-    "day": "Tue",
-    "met1": "68°",
-    "img": "@/assets/icon-overcast.webp",
-    "met2": "57°"
-  },
-  {
-    "day": "Tue",
-    "met1": "68°",
-    "img": "@/assets/icon-overcast.webp",
-    "met2": "57°"
-  },
-  {
-    "day": "Tue",
-    "met1": "68°",
-    "img": "@/assets/icon-overcast.webp",
-    "met2": "57°"
-  },
-  {
-    "day": "Tue",
-    "met1": "68°",
-    "img": "@/assets/icon-overcast.webp",
-    "met2": "57°"
-  },
-  {
-    "day": "Tue",
-    "met1": "68°",
-    "img": "@/assets/icon-overcast.webp",
-    "met2": "57°"
-  },
-]
 
 export default function DailyForecast() {
+  const { daily } = useWeatherViewModel();
+
   return (
     <div>
       <h4>Daily forecast</h4>
       <div className="flex gap-3">
-        {data.map((card, i) => (
+        {daily.map((card: IDaily, i: number) => (
           <Card key={i}>
             <CardHeader>
               <CardTitle>
-                {card.day}
+                {card.dayName}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <img src={card.img} alt="img" />
+              <img src={card.icon} alt="img" />
             </CardContent>
             <CardFooter>
-              <span>{card.met1}</span>
-              <span>{card.met2}</span>
+              <span>{`${card.minTemp}°C`}</span>
+              <span>{`${card.maxTemp}°C`}</span>
             </CardFooter>
           </Card>
         ))}
