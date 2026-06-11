@@ -7,22 +7,22 @@ export default function DailyForecast() {
   const { daily } = useWeatherViewModel();
 
   return (
-    <div>
-      <h4>Daily forecast</h4>
-      <div className="flex gap-3">
+    <div className="mt-10">
+      <h4 className="font-bold mb-7">Daily forecast</h4>
+      <div className="flex gap-3 text-center">
         {daily.map((card: IDaily, i: number) => (
-          <Card key={i}>
-            <CardHeader>
+          <Card key={i} className="flex-1 border bg-neutral-700">
+            <CardHeader className="-m-2">
               <CardTitle>
                 {card.dayName}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="w-30">
               <img src={card.icon} alt="img" />
             </CardContent>
-            <CardFooter>
-              <span>{`${card.minTemp}°C`}</span>
-              <span>{`${card.maxTemp}°C`}</span>
+            <CardFooter className="flex justify-between">
+              <span>{`${card.minTemp}°`}</span>
+              <span>{`${card.maxTemp}°`}</span>
             </CardFooter>
           </Card>
         ))}

@@ -13,8 +13,8 @@ export function App() {
       <Navbar />
       <HeroHeading />
       <SearchBar />
-      <section className="grid grid-cols-3 gap-4">
-        <div className="col-span-2">
+      <section className="grid grid-cols-4 gap-4 mt-10">
+        <div className="col-span-3">
           <WeatherOverview />
           <DailyForecast />
         </div>

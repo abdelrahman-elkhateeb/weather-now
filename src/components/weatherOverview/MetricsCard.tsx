@@ -21,23 +21,23 @@ export default function MetricsCard() {
   };;
 
   const todayForecast = {
-    "Feels Like": `${feelsLike}°C`,
+    "Feels Like": `${feelsLike}°`,
     "Humidity": `${humidity}%`,
     "Wind": `${wind} km/h`,
     "Precipitation": `${precipitation} mm`
   };
 
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-4 mt-8">
       {Object.entries(todayForecast).map(([key, value]) => (
-        <Card key={key} className="">
+        <Card key={key} className="flex-1 bg-neutral-700 rounded-xl border">
           <CardHeader>
-            <CardTitle className="">
+            <CardTitle className="-mt-2">
               {key}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="">
+            <p className="text-2xl">
               {value}
             </p>
           </CardContent>
