@@ -1,33 +1,34 @@
+import type { SearchStore } from "@/types/searchStoreTypes";
 import { create } from "zustand";
-
-type Coordinates = { lat: number; lng: number } | null;
-
-type SearchStore = {
-  cityName: string;
-  isSelected: boolean;
-
-  selectedCoordinates: Coordinates;
-
-  setCityName: (name: string) => void;
-  setIsSelected: (value: boolean) => void;
-  setSelectedCoordinates: (coords: Coordinates) => void;
-
-  reset: () => void;
-}
 
 export const useSearchStore = create<SearchStore>((set) => ({
   cityName: "",
   isSelected: false,
   selectedCoordinates: null,
 
+  unit: "metric",
+  overrides: {},
+
   setCityName: (name) => set({ cityName: name }),
   setIsSelected: (value) => set({ isSelected: value }),
   setSelectedCoordinates: (coords) => set({ selectedCoordinates: coords }),
+
+  setUnit: (unit) => set({ unit }),
+  setOverride: (key, value) =>
+    set((state) => ({
+      overrides: {
+        ...state.overrides,
+        [key]: value,
+      },
+    })),
+
 
   reset: () =>
     set({
       cityName: "",
       isSelected: false,
       selectedCoordinates: null,
+      unit: "metric",
+      overrides: {},
     }),
 }));

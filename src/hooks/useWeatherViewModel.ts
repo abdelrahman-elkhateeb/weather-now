@@ -6,7 +6,7 @@ import { weatherIconMap } from "@/types/weatherIconMapTypes";
 import { mapWeatherCode } from "@/utils/weatherCodeMap";
 
 export function useWeatherViewModel() {
-  const { selectedCoordinates, cityName } = useSearchStore();
+  const { selectedCoordinates, cityName, unit, overrides } = useSearchStore();
 
   const { data, isPending } = useWeather(
     selectedCoordinates?.lat,
@@ -23,27 +23,21 @@ export function useWeatherViewModel() {
   };
 
   const current = data?.current
-    ? (() => {
-      const { icon } = resolveWeather(
-        data.current.weather_code
-      );
+    ? {
+      cityName,
+      date: format(
+        new Date(data.current.time),
+        "EEEE, MMM d, yyyy"
+      ),
 
-      return {
-        cityName,
-        date: format(
-          new Date(data.current.time),
-          "EEEE, MMM d, yyyy"
-        ),
+      temperature: data.current.temperature_2m,
+      feelsLike: data.current.apparent_temperature,
+      humidity: data.current.relative_humidity_2m,
+      wind: data.current.wind_speed_10m,
+      precipitation: data.current.precipitation,
 
-        temperature: Math.round(data.current.temperature_2m),
-        feelsLike: Math.round(data.current.apparent_temperature),
-        humidity: data.current.relative_humidity_2m,
-        wind: data.current.wind_speed_10m,
-        precipitation: data.current.precipitation,
-
-        icon,
-      };
-    })()
+      icon: resolveWeather(data.current.weather_code).icon,
+    }
     : null;
 
   const daily = data?.daily
