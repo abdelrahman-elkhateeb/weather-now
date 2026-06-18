@@ -1,10 +1,10 @@
 import { useWeatherViewModel } from "@/hooks/useWeatherViewModel";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { useSearchStore } from "@/stores/useSearchStore";
+import { useWeatherUnits } from "@/hooks/useWeatherUnits";
 
 export default function MetricsCard() {
   const { current, isLoading } = useWeatherViewModel();
-  const { unit } = useSearchStore();
+  const { labels } = useWeatherUnits();
 
   if (isLoading || !current) {
     return (
@@ -16,24 +16,11 @@ export default function MetricsCard() {
 
   const { feelsLike, humidity, wind, precipitation } = current;
 
-  const labels = {
-    metric: {
-      temp: "°C",
-      wind: "km/h",
-      precipitation: "mm",
-    },
-    imperial: {
-      temp: "°F",
-      wind: "mph",
-      precipitation: "in",
-    },
-  };
-
   const todayForecast = {
-    "Feels Like": `${feelsLike}${labels[unit].temp}`,
+    "Feels Like": `${feelsLike}${labels.temperature}`,
     Humidity: `${humidity}%`,
-    Wind: `${wind} ${labels[unit].wind}`,
-    Precipitation: `${precipitation} ${labels[unit].precipitation}`,
+    Wind: `${wind} ${labels.wind}`,
+    Precipitation: `${precipitation} ${labels.precipitation}`,
   };
 
   return (

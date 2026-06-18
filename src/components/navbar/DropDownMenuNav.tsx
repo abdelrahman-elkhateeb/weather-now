@@ -1,15 +1,16 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { ChevronDown, Settings } from "lucide-react";
-import { Button } from "../ui/button";
 import { useSearchStore } from "@/stores/useSearchStore";
+import { ChevronDown, Settings } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 
 export default function DropDownMenuNav() {
-  const { unit, setUnit, setOverride } = useSearchStore();
+  const { units, setAllUnits, setUnit } = useSearchStore();
 
-  const toggleUnit = () => {
-    setUnit(unit === "metric" ? "imperial" : "metric");
-  };
+  const isAllMetric = Object.values(units).every(
+    (unit) => unit === "metric"
+  );
+
+  const nextGlobalUnit = isAllMetric ? "imperial" : "metric";
 
   return (
     <DropdownMenu>
@@ -20,36 +21,34 @@ export default function DropDownMenuNav() {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="bg-neutral-700">
-        <Button variant="ghost" onClick={toggleUnit}>
-          Switch to {unit === "metric" ? "imperial" : "metric"}
-        </Button>
+        <DropdownMenuItem onClick={() => setAllUnits(nextGlobalUnit)}>
+          Switch to {nextGlobalUnit}
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuLabel>
-            temperature
-          </DropdownMenuLabel>
+          <DropdownMenuLabel>temperature</DropdownMenuLabel>
 
-          <DropdownMenuItem onClick={() => setOverride("temperature", "metric")}>
+          <DropdownMenuItem onClick={() => setUnit("temperature", "metric")}>
             Celsius (°C)
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={() => setOverride("temperature", "imperial")}>
-            fahrenheit (°F)
+          <DropdownMenuItem onClick={() => setUnit("temperature", "imperial")}>
+            Fahrenheit (°F)
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuLabel>
-            Wind Speed
-          </DropdownMenuLabel>
+          <DropdownMenuLabel>Wind Speed</DropdownMenuLabel>
 
-          <DropdownMenuItem onClick={() => setOverride("wind", "metric")}>
+          <DropdownMenuItem onClick={() => setUnit("wind", "metric")}>
             Km/h
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={() => setOverride("wind", "imperial")}>
+          <DropdownMenuItem onClick={() => setUnit("wind", "imperial")}>
             Mph
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -57,21 +56,17 @@ export default function DropDownMenuNav() {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuLabel>
-            Precipitation
-          </DropdownMenuLabel>
+          <DropdownMenuLabel>Precipitation</DropdownMenuLabel>
 
-          <DropdownMenuItem onClick={() => setOverride("precipitation", "metric")}>
+          <DropdownMenuItem onClick={() => setUnit("precipitation", "metric")}>
             Millimeters (mm)
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={() => setOverride("precipitation", "imperial")}>
+          <DropdownMenuItem onClick={() => setUnit("precipitation", "imperial")}>
             Inches (in)
           </DropdownMenuItem>
         </DropdownMenuGroup>
-
       </DropdownMenuContent>
-
     </DropdownMenu>
-  )
+  );
 }

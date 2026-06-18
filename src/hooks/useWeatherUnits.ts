@@ -1,5 +1,4 @@
 import { useSearchStore } from "@/stores/useSearchStore";
-import { resolveUnit } from "@/utils/resolveUnits";
 import {
   convertTemperature,
   convertWind,
@@ -7,26 +6,24 @@ import {
 } from "@/utils/converter";
 
 export function useWeatherUnits() {
-  const { unit, overrides } = useSearchStore();
-
-  const temperatureUnit = resolveUnit("temperature", unit, overrides);
-  const windUnit = resolveUnit("wind", unit, overrides);
-  const precipitationUnit = resolveUnit("precipitation", unit, overrides);
+  const units = useSearchStore((state) => state.units);
 
   return {
-    formatTemperature: (v: number) =>
-      convertTemperature(v, temperatureUnit),
+    formatTemperature: (value: number) =>
+      convertTemperature(value, units.temperature),
 
-    formatWind: (v: number) =>
-      convertWind(v, windUnit),
+    formatWind: (value: number) =>
+      convertWind(value, units.wind),
 
-    formatPrecipitation: (v: number) =>
-      convertPrecipitation(v, precipitationUnit),
+    formatPrecipitation: (value: number) =>
+      convertPrecipitation(value, units.precipitation),
 
-    units: {
-      temperatureUnit,
-      windUnit,
-      precipitationUnit,
+    labels: {
+      temperature: units.temperature === "imperial" ? "°F" : "°C",
+      wind: units.wind === "imperial" ? "mph" : "km/h",
+      precipitation: units.precipitation === "imperial" ? "in" : "mm",
     },
+
+    units,
   };
 }

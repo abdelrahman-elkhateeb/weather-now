@@ -1,33 +1,53 @@
 import type { SearchStore } from "@/types/searchStoreTypes";
 import { create } from "zustand";
 
-export const useSearchStore = create<SearchStore>((set) => ({
+const metricUnits = {
+  temperature: "metric",
+  wind: "metric",
+  precipitation: "metric",
+} as const;
+
+const imperialUnits = {
+  temperature: "imperial",
+  wind: "imperial",
+  precipitation: "imperial",
+} as const;
+
+export const useSearchStore = create<SearchStore>((set, get) => ({
   cityName: "",
 
   selectedCity: null,
   searchedCity: null,
 
-  unit: "metric",
-  overrides: {},
+  units: metricUnits,
 
   setCityName: (name) => set({ cityName: name }),
+  setSelectedCity: (city) => set({ selectedCity: city }),
+  setSearchedCity: (city) => set({ searchedCity: city }),
 
-  setSelectedCity: (city) =>
-    set({ selectedCity: city }),
+  setAllUnits: (unit) =>
+    set({
+      units: unit === "metric" ? metricUnits : imperialUnits,
+    }),
+  toggleAllUnits: () => {
+    const { units } = get();
 
-  setSearchedCity: (city) =>
-    set({ searchedCity: city }),
+    const isAllMetric = Object.values(units).every(
+      (unit) => unit === "metric"
+    );
 
-  setUnit: (unit) => set({ unit }),
+    set({
+      units: isAllMetric ? imperialUnits : metricUnits,
+    });
+  },
 
-  setOverride: (key, value) =>
+  setUnit: (key, unit) =>
     set((state) => ({
-      overrides: {
-        ...state.overrides,
-        [key]: value,
+      units: {
+        ...state.units,
+        [key]: unit,
       },
     })),
-
 
   clearSearch: () =>
     set({
@@ -36,13 +56,11 @@ export const useSearchStore = create<SearchStore>((set) => ({
       searchedCity: null,
     }),
 
-
   reset: () =>
     set({
       cityName: "",
       selectedCity: null,
       searchedCity: null,
-      unit: "metric",
-      overrides: {},
+      units: metricUnits,
     }),
 }));
