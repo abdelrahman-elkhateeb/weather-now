@@ -31,17 +31,11 @@ export function useWeatherViewModel() {
     }))
     : [];
 
-  const hourly = data?.hourly
-    ? data.hourly.map((hourly) => ({
-      ...hourly,
-      temperature: formatTemperature(hourly.temperature)
-    }))
-    : [];
 
   return {
     current,
     daily,
-    hourly,
+    hourlyByDay: data?.hourlyByDay ?? {},
     isLoading: isPending,
   };
 }
