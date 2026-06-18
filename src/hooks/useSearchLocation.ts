@@ -8,15 +8,13 @@ export function useSearchLocation() {
   const {
     cityName,
     setCityName,
-    isSelected,
-    setIsSelected,
     selectedCoordinates,
     setSelectedCoordinates,
     reset,
   } = useSearchStore();
 
   // GEO API
-  const { data: location } = useGeoCode(cityName, isSelected);
+  const { data: location } = useGeoCode(cityName);
 
   // WEATHER API (server state)
   const { data: cityData, isPending: isCityDataLoading } = useWeather(
@@ -38,13 +36,11 @@ export function useSearchLocation() {
 
   function handleSearchSubmit() {
     if (!selectedCoordinates) return;
-    setIsSelected(true);
   }
 
   function handleCitySelect(city: ILocalCity) {
     setSelectedCoordinates({ lat: city.lat, lng: city.lng });
     setCityName(`${city.name}, ${city.country}`);
-    setIsSelected(true);
   }
 
   function handleReset() {
@@ -54,7 +50,6 @@ export function useSearchLocation() {
   return {
     // state
     cityName,
-    isSelected,
     citiesData,
 
     // actions

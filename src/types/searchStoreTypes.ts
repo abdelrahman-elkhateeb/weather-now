@@ -10,7 +10,6 @@ export type UnitOverrides = {
 
 export type SearchStore = {
   cityName: string;
-  isSelected: boolean;
 
   selectedCoordinates: Coordinates;
 
@@ -18,7 +17,6 @@ export type SearchStore = {
   overrides: UnitOverrides;
 
   setCityName: (name: string) => void;
-  setIsSelected: (value: boolean) => void;
   setSelectedCoordinates: (coords: Coordinates) => void;
 
   setUnit: (unit: MeasurementUnit) => void;

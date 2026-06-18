@@ -11,7 +11,6 @@ import {
   ComboboxList
 } from "./ui/combobox";
 import { Field } from "./ui/field";
-import { Search } from "lucide-react";
 
 export default function SearchBar() {
   const {
@@ -22,7 +21,6 @@ export default function SearchBar() {
     handleCitySelect,
   } = useSearchLocation();
 
-  const setIsSelected = useSearchStore((s) => s.setIsSelected);
 
   return (
     <Combobox items={citiesData}>
@@ -32,7 +30,6 @@ export default function SearchBar() {
           value={cityName}
           onChange={(e) => {
             setCityName(e.target.value);
-            setIsSelected(false);
           }}
           type="search"
           placeholder={` Search for a place...`}
