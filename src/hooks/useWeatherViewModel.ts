@@ -1,79 +1,39 @@
-import { format } from "date-fns";
-
 import { useWeather } from "@/services/useWeather";
 import { useSearchStore } from "@/stores/useSearchStore";
-import { weatherIconMap } from "@/types/weatherIconMapTypes";
-import { mapWeatherCode } from "@/utils/weatherCodeMap";
+import {
+  convertPrecipitation,
+  convertTemperature,
+  convertWind,
+} from "@/utils/converter";
+import { resolveUnit } from "@/utils/resolveUnits";
 
 export function useWeatherViewModel() {
-  const { selectedCoordinates, cityName, unit, overrides } = useSearchStore();
+  const { searchedCity, unit, overrides, cityName } = useSearchStore();
 
   const { data, isPending } = useWeather(
-    selectedCoordinates?.lat,
-    selectedCoordinates?.lng
+    searchedCity?.latitude,
+    searchedCity?.longitude
   );
 
-  const resolveWeather = (code?: number) => {
-    const condition =
-      code !== undefined ? mapWeatherCode(code) : "sunny";
-
-    return {
-      icon: weatherIconMap[condition],
-    };
-  };
+  const temperatureUnit = resolveUnit("temperature", unit, overrides);
+  const windUnit = resolveUnit("wind", unit, overrides);
+  const precipitationUnit = resolveUnit("precipitation", unit, overrides);
 
   const current = data?.current
     ? {
+      ...data.current,
       cityName,
-      date: format(
-        new Date(data.current.time),
-        "EEEE, MMM d, yyyy"
-      ),
-
-      temperature: data.current.temperature_2m,
-      feelsLike: data.current.apparent_temperature,
-      humidity: data.current.relative_humidity_2m,
-      wind: data.current.wind_speed_10m,
-      precipitation: data.current.precipitation,
-
-      icon: resolveWeather(data.current.weather_code).icon,
+      temperature: convertTemperature(data.current.temperature, temperatureUnit),
+      feelsLike: convertTemperature(data.current.feelsLike, temperatureUnit),
+      wind: convertWind(data.current.wind, windUnit),
+      precipitation: convertPrecipitation(data.current.precipitation, precipitationUnit),
     }
     : null;
 
-  const daily = data?.daily
-    ? data.daily.time.map((time: string, index: number) => {
-      const { icon } = resolveWeather(
-        data.daily.weather_code[index]
-      );
-
-      return {
-        dayName: format(new Date(time), "EEE"),
-        minTemp: data.daily.temperature_2m_min[index],
-        maxTemp: data.daily.temperature_2m_max[index],
-        icon,
-      };
-    })
-    : [];
-
-  const hourly = data?.hourly
-    ? data.hourly.time.slice(0, 7).map((time: string, index: number) => {
-      const { icon } = resolveWeather(
-        data.hourly.weather_code[index]
-      );
-
-      return {
-        time: format(new Date(time), "HH:mm"),
-        temperature:
-          data.hourly.temperature_2m[index],
-        icon,
-      };
-    })
-    : [];
-
   return {
     current,
-    daily,
-    hourly,
+    daily: data?.daily ?? [],
+    hourly: data?.hourly ?? [],
     isLoading: isPending,
   };
 }

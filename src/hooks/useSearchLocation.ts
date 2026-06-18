@@ -1,46 +1,29 @@
 import { useGeoCode } from "@/services/useGeoCode";
-import { useWeather } from "@/services/useWeather";
-import type { ICity, ILocalCity } from "@/types/cityTypes";
 import { useSearchStore } from "@/stores/useSearchStore";
-import { useMemo } from "react";
+import type { GeoCity } from "@/types/searchStoreTypes";
 
 export function useSearchLocation() {
   const {
     cityName,
     setCityName,
-    selectedCoordinates,
-    setSelectedCoordinates,
+    selectedCity,
+    setSelectedCity,
+    setSearchedCity,
     reset,
   } = useSearchStore();
 
-  // GEO API
   const { data: location } = useGeoCode(cityName);
 
-  // WEATHER API (server state)
-  const { data: cityData, isPending: isCityDataLoading } = useWeather(
-    selectedCoordinates?.lat,
-    selectedCoordinates?.lng
-  );
+  const citiesData = location || [];
 
-  // normalize geo results
-  const citiesData: ILocalCity[] = useMemo(() => {
-    return (
-      location?.map((city: ICity) => ({
-        name: city.name,
-        country: city.country,
-        lat: city.latitude,
-        lng: city.longitude,
-      })) || []
-    );
-  }, [location]);
-
-  function handleSearchSubmit() {
-    if (!selectedCoordinates) return;
+  function handleCitySelect(city: GeoCity) {
+    setSelectedCity(city);
+    setCityName(`${city.name}, ${city.country}`);
   }
 
-  function handleCitySelect(city: ILocalCity) {
-    setSelectedCoordinates({ lat: city.lat, lng: city.lng });
-    setCityName(`${city.name}, ${city.country}`);
+  function handleSearchSubmit() {
+    if (!selectedCity) return;
+    setSearchedCity(selectedCity);
   }
 
   function handleReset() {
@@ -48,18 +31,11 @@ export function useSearchLocation() {
   }
 
   return {
-    // state
     cityName,
     citiesData,
-
-    // actions
     setCityName,
-    handleSearchSubmit,
     handleCitySelect,
+    handleSearchSubmit,
     handleReset,
-
-    // server state
-    cityData,
-    isCityDataLoading,
   };
 }

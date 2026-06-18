@@ -3,15 +3,23 @@ import { create } from "zustand";
 
 export const useSearchStore = create<SearchStore>((set) => ({
   cityName: "",
-  selectedCoordinates: null,
+
+  selectedCity: null,
+  searchedCity: null,
 
   unit: "metric",
   overrides: {},
 
   setCityName: (name) => set({ cityName: name }),
-  setSelectedCoordinates: (coords) => set({ selectedCoordinates: coords }),
+
+  setSelectedCity: (city) =>
+    set({ selectedCity: city }),
+
+  setSearchedCity: (city) =>
+    set({ searchedCity: city }),
 
   setUnit: (unit) => set({ unit }),
+
   setOverride: (key, value) =>
     set((state) => ({
       overrides: {
@@ -21,10 +29,19 @@ export const useSearchStore = create<SearchStore>((set) => ({
     })),
 
 
+  clearSearch: () =>
+    set({
+      cityName: "",
+      selectedCity: null,
+      searchedCity: null,
+    }),
+
+
   reset: () =>
     set({
       cityName: "",
-      selectedCoordinates: null,
+      selectedCity: null,
+      searchedCity: null,
       unit: "metric",
       overrides: {},
     }),

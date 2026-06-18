@@ -1,4 +1,7 @@
-export type Coordinates = { lat: number; lng: number } | null;
+export type Coordinates = {
+  latitude: number;
+  longitude: number;
+};
 
 export type MeasurementUnit = "metric" | "imperial";
 
@@ -8,20 +11,30 @@ export type UnitOverrides = {
   precipitation?: MeasurementUnit;
 };
 
+export type GeoCity = {
+  name: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+};
+
 export type SearchStore = {
   cityName: string;
 
-  selectedCoordinates: Coordinates;
+  selectedCity: GeoCity | null;
+  searchedCity: GeoCity | null;
 
   unit: MeasurementUnit;
   overrides: UnitOverrides;
 
   setCityName: (name: string) => void;
-  setSelectedCoordinates: (coords: Coordinates) => void;
+
+  setSelectedCity: (city: GeoCity | null) => void;
+  setSearchedCity: (city: GeoCity | null) => void;
 
   setUnit: (unit: MeasurementUnit) => void;
   setOverride: (key: keyof UnitOverrides, value?: MeasurementUnit) => void;
 
-
+  clearSearch: () => void;
   reset: () => void;
-}
+};

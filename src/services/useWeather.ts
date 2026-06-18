@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getWeatherData } from "./weatherApi";
 
-export function useWeather(lat?: number, lng?: number) {
+export function useWeather(latitude?: number, longitude?: number) {
   return useQuery({
-    queryKey: ["weather", lat, lng],
-    queryFn: () => getWeatherData(lat!, lng!),
-    enabled: !!lat && !!lng,
-    staleTime: 60000
+    queryKey: ["weather", latitude, longitude],
+    queryFn: () => getWeatherData(latitude!, longitude!),
+    enabled: !!latitude && !!longitude,
+    staleTime: 60000,
   });
 }

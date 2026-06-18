@@ -1,6 +1,5 @@
 import { useSearchLocation } from "@/hooks/useSearchLocation";
-import { useSearchStore } from "@/stores/useSearchStore";
-import type { ILocalCity } from "@/types/cityTypes";
+import type { GeoCity } from "@/types/searchStoreTypes";
 import { Button } from "./ui/button";
 import {
   Combobox,
@@ -48,12 +47,12 @@ export default function SearchBar() {
       <ComboboxContent className="bg-neutral-700 rounded-md">
         <ComboboxEmpty>No items found.</ComboboxEmpty>
         <ComboboxList>
-          {(city: ILocalCity) => {
+          {(city: GeoCity) => {
             const itemLabel = `${city.name}, ${city.country}`;
-
+            
             return (
               <ComboboxItem
-                key={`${city.lat}-${city.lng}`}
+                key={`${city.latitude}-${city.longitude}`}
                 value={itemLabel}
                 onClick={() => handleCitySelect(city)}
                 className="data-[highlighted]:bg-neutral-600 data-[highlighted]:outline data-[highlighted]:border-1 data-[highlighted]:border-neutral-500 rounded-md"

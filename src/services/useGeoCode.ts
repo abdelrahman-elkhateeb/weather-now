@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCoordinates } from "./weatherApi";
 import { useDebounce } from "@/hooks/useDebounce";
 
-export function useGeoCode(cityName: string ) {
+export function useGeoCode(cityName: string) {
   const debouncedCityName = useDebounce(cityName, 500);
 
   const enabled =
@@ -10,7 +10,9 @@ export function useGeoCode(cityName: string ) {
 
   return useQuery({
     queryKey: ["geocode", debouncedCityName],
+
     queryFn: () => getCoordinates(debouncedCityName),
+
     enabled,
   });
 }
