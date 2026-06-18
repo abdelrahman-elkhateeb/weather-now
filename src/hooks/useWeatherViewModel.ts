@@ -1,39 +1,47 @@
 import { useWeather } from "@/services/useWeather";
 import { useSearchStore } from "@/stores/useSearchStore";
-import {
-  convertPrecipitation,
-  convertTemperature,
-  convertWind,
-} from "@/utils/converter";
-import { resolveUnit } from "@/utils/resolveUnits";
+import { useWeatherUnits } from "./useWeatherUnits";
 
 export function useWeatherViewModel() {
-  const { searchedCity, unit, overrides, cityName } = useSearchStore();
+  const { searchedCity, cityName } = useSearchStore();
+  const { formatTemperature, formatWind, formatPrecipitation } =
+    useWeatherUnits();
 
   const { data, isPending } = useWeather(
     searchedCity?.latitude,
     searchedCity?.longitude
   );
 
-  const temperatureUnit = resolveUnit("temperature", unit, overrides);
-  const windUnit = resolveUnit("wind", unit, overrides);
-  const precipitationUnit = resolveUnit("precipitation", unit, overrides);
-
   const current = data?.current
     ? {
       ...data.current,
       cityName,
-      temperature: convertTemperature(data.current.temperature, temperatureUnit),
-      feelsLike: convertTemperature(data.current.feelsLike, temperatureUnit),
-      wind: convertWind(data.current.wind, windUnit),
-      precipitation: convertPrecipitation(data.current.precipitation, precipitationUnit),
+      temperature: formatTemperature(data.current.temperature),
+      feelsLike: formatTemperature(data.current.feelsLike),
+      wind: formatWind(data.current.wind),
+      precipitation: formatPrecipitation(data.current.precipitation),
     }
     : null;
 
+  const daily = data?.daily
+    ? data.daily.map((day) => ({
+      ...day,
+      minTemp: formatTemperature(day.minTemp),
+      maxTemp: formatTemperature(day.maxTemp),
+    }))
+    : [];
+
+  const hourly = data?.hourly
+    ? data.hourly.map((hourly) => ({
+      ...hourly,
+      temperature: formatTemperature(hourly.temperature)
+    }))
+    : [];
+
   return {
     current,
-    daily: data?.daily ?? [],
-    hourly: data?.hourly ?? [],
+    daily,
+    hourly,
     isLoading: isPending,
   };
 }

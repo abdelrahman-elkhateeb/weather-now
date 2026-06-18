@@ -1,6 +1,6 @@
-import { useWeatherViewModel } from "@/hooks/useWeatherViewModel"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { useWeatherViewModel } from "@/hooks/useWeatherViewModel";
 import type { IDaily } from "@/types/DailyTypes";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 
 
 export default function DailyForecast() {

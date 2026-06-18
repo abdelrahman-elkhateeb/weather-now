@@ -1,30 +1,39 @@
-import { useWeatherViewModel } from "@/hooks/useWeatherViewModel"
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
+import { useWeatherViewModel } from "@/hooks/useWeatherViewModel";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { useSearchStore } from "@/stores/useSearchStore";
 
 export default function MetricsCard() {
   const { current, isLoading } = useWeatherViewModel();
+  const { unit } = useSearchStore();
 
   if (isLoading || !current) {
     return (
-      <div className="flex gap-3">
-        <p className="text-muted-foreground animate-pulse">Loading weather metrics...</p>
-      </div>
+      <p className="text-muted-foreground animate-pulse">
+        Loading weather metrics...
+      </p>
     );
   }
 
+  const { feelsLike, humidity, wind, precipitation } = current;
 
-  const { feelsLike, humidity, wind, precipitation } = current as {
-    feelsLike: number;
-    humidity: number;
-    wind: number;
-    precipitation: number;
-  };;
+  const labels = {
+    metric: {
+      temp: "°C",
+      wind: "km/h",
+      precipitation: "mm",
+    },
+    imperial: {
+      temp: "°F",
+      wind: "mph",
+      precipitation: "in",
+    },
+  };
 
   const todayForecast = {
-    "Feels Like": `${feelsLike}°`,
-    "Humidity": `${humidity}%`,
-    "Wind": `${wind} km/h`,
-    "Precipitation": `${precipitation} mm`
+    "Feels Like": `${feelsLike}${labels[unit].temp}`,
+    Humidity: `${humidity}%`,
+    Wind: `${wind} ${labels[unit].wind}`,
+    Precipitation: `${precipitation} ${labels[unit].precipitation}`,
   };
 
   return (
@@ -32,17 +41,13 @@ export default function MetricsCard() {
       {Object.entries(todayForecast).map(([key, value]) => (
         <Card key={key} className="flex-1 bg-neutral-700 rounded-xl border">
           <CardHeader>
-            <CardTitle className="-mt-2">
-              {key}
-            </CardTitle>
+            <CardTitle className="-mt-2">{key}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl">
-              {value}
-            </p>
+            <p className="text-2xl">{value}</p>
           </CardContent>
         </Card>
       ))}
     </div>
-  )
+  );
 }

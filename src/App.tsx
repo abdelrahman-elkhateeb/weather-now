@@ -4,24 +4,30 @@ import HourlyForecast from "./components/HourlyForecast";
 import Navbar from "./components/navbar/Navbar";
 import SearchBar from "./components/SearchBar";
 import WeatherOverview from "./components/weatherOverview/WeatherOverview";
-
-
+import { useSearchStore } from "./stores/useSearchStore";
 
 export function App() {
+  const searchedCity = useSearchStore(s => s.searchedCity);
+
   return (
     <main className="container mx-auto px-4">
       <Navbar />
       <HeroHeading />
       <SearchBar />
-      <section className="grid grid-cols-4 gap-4 mt-10">
-        <div className="col-span-3">
-          <WeatherOverview />
-          <DailyForecast />
-        </div>
-        <div className="col-span-1">
-          <HourlyForecast />
-        </div>
-      </section>
+      {searchedCity ? (
+        <section className="grid grid-cols-4 gap-4 mt-10">
+          <div className="col-span-3">
+            <WeatherOverview />
+            <DailyForecast />
+          </div>
+
+          <div className="col-span-1">
+            <HourlyForecast />
+          </div>
+        </section>
+      ) : (
+        <p className="text-center mt-5 font-bold text-3xl">no search result found!</p>
+      )}
     </main>
   )
 }

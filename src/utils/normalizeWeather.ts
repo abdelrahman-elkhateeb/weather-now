@@ -9,6 +9,15 @@ export function normalizeWeather(data: WeatherApiResponse) {
     return weatherIconMap[condition];
   };
 
+  const currentTime = new Date(data.current.time);
+  const currentHour = currentTime.getHours();
+
+  const startIndex = data.hourly.time.findIndex((t) => {
+    return new Date(t).getHours() === currentHour;
+  });
+
+  const safeStart = startIndex >= 0 ? startIndex : 0;
+
   return {
     current: {
       time: data.current.time,
@@ -27,10 +36,16 @@ export function normalizeWeather(data: WeatherApiResponse) {
       icon: resolveIcon(data.daily.weather_code[i]),
     })),
 
-    hourly: data.hourly.time.slice(0, 7).map((time: string, i: number) => ({
-      time: format(new Date(time), "HH:mm"),
-      temperature: data.hourly.temperature_2m[i],
-      icon: resolveIcon(data.hourly.weather_code[i]),
-    })),
+    hourly: data.hourly.time
+      .slice(safeStart, safeStart + 7)
+      .map((time, i) => {
+        const index = safeStart + i;
+
+        return {
+          time: format(new Date(time), "HH:mm"),
+          temperature: data.hourly.temperature_2m[index],
+          icon: resolveIcon(data.hourly.weather_code[index]),
+        };
+      }),
   };
 }
