@@ -14,7 +14,7 @@ export default function DropDownMenuNav() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex gap-2 items-center">
+      <DropdownMenuTrigger className="flex gap-2 items-center bg-neutral-800 p-1 rounded-md">
         <Settings size={16} strokeWidth={1} />
         <span>units</span>
         <ChevronDown size={16} strokeWidth={1} />

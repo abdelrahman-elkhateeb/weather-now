@@ -15,7 +15,7 @@ export function App() {
       <HeroHeading />
       <SearchBar />
       {searchedCity ? (
-        <section className="grid md:grid-cols-4 gap-4 mt-10">
+        <section className="md:grid md:grid-cols-4 gap-4 mt-10">
           <div className="md:col-span-3">
             <WeatherOverview />
             <DailyForecast />

@@ -3,7 +3,7 @@ import Logo from "./Logo";
 
 export default function Navbar() {
   return (
-    <nav className="flex justify-between pt-10">
+    <nav className="flex justify-between pt-5">
       <Logo />
       <DropDownMenuNav />
     </nav>
