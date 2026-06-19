@@ -23,7 +23,7 @@ export default function SearchBar() {
 
   return (
     <Combobox items={citiesData}>
-      <Field orientation="horizontal" className="flex justify-center">
+      <Field orientation="horizontal" className="flex flex-col md:flex-row md:justify-center">
         <ComboboxInput
           name="cityName"
           value={cityName}
@@ -32,13 +32,13 @@ export default function SearchBar() {
           }}
           type="search"
           placeholder={` Search for a place...`}
-          className="w-1/2 rounded-md bg-neutral-800 border-0"
+          className="md:w-1/2 w-full rounded-md bg-neutral-800 border-0"
         />
 
         <Button
           type="button"
           onClick={handleSearchSubmit}
-          className="bg-blue-500 text-white rounded-md"
+          className="bg-blue-500 text-white rounded-md w-full md:w-fit"
         >
           Search
         </Button>
