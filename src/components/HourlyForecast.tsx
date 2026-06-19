@@ -8,9 +8,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import HourlyForecastLoading from "./loading/HourlyForecastLoading";
 
 export default function HourlyForecast() {
-  const { hourlyByDay } = useWeatherViewModel();
+  const { hourlyByDay, isLoading } = useWeatherViewModel();
 
   const days = Object.entries(hourlyByDay);
   const [selectedDay, setSelectedDay] = useState("");
@@ -20,6 +21,7 @@ export default function HourlyForecast() {
     hourlyByDay[activeDay]?.hours.slice(0, 8) ?? [];
   const activeLabel = hourlyByDay[activeDay]?.label ?? "Select day";
 
+  if (isLoading || !hourlyByDay) return <HourlyForecastLoading />;
   return (
     <div className="bg-neutral-700 rounded-lg p-5">
       <div className="flex justify-between">

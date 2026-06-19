@@ -1,17 +1,14 @@
 import { useWeatherViewModel } from "@/hooks/useWeatherViewModel";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useWeatherUnits } from "@/hooks/useWeatherUnits";
+import MetricCardLoading from "../loading/MetricCardLoading";
 
 export default function MetricsCard() {
   const { current, isLoading } = useWeatherViewModel();
   const { labels } = useWeatherUnits();
 
   if (isLoading || !current) {
-    return (
-      <p className="text-muted-foreground animate-pulse">
-        Loading weather metrics...
-      </p>
-    );
+    return <MetricCardLoading />;
   }
 
   const { feelsLike, humidity, wind, precipitation } = current;

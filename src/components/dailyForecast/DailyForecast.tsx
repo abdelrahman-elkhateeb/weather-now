@@ -1,10 +1,13 @@
 import { useWeatherViewModel } from "@/hooks/useWeatherViewModel";
 import type { IDaily } from "@/types/DailyTypes";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import DailyForecastLoading from "../loading/DailyForecastLoading";
 
 
 export default function DailyForecast() {
-  const { daily } = useWeatherViewModel();
+  const { daily, isLoading } = useWeatherViewModel();
+
+  if (isLoading || !daily) return <DailyForecastLoading />
 
   return (
     <div className="mt-10">
