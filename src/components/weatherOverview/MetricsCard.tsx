@@ -24,7 +24,7 @@ export default function MetricsCard() {
   };
 
   return (
-    <div className="flex gap-4 mt-8">
+    <div className="grid grid-cols-2 md:flex gap-4 mt-8">
       {Object.entries(todayForecast).map(([key, value]) => (
         <Card key={key} className="flex-1 bg-neutral-700 rounded-xl border">
           <CardHeader>

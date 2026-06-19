@@ -4,19 +4,19 @@ export default function WeatherHeroCard() {
   const { current } = useWeatherViewModel();
 
   return (
-    <div className={`bg-[url(@/assets/bg-today-large.svg)] bg-cover bg-no-repeat rounded-lg flex items-center justify-between px-15 min-h-65 flex-col`}>
+    <div className={`bg-[url(@/assets/bg-today-large.svg)] bg-cover bg-no-repeat rounded-lg flex items-center justify-center md:justify-between md:flex-row px-15 min-h-65 flex-col`}>
       <div>
-        <h2 className="font-bold text-3xl">
+        <h2 className="font-bold mt-5 md:mt-0 text-3xl">
           {current?.cityName}
         </h2>
         <p className="text-neutral-200 mt-3">{current?.time}</p>
       </div>
 
-      <div className="flex">
+      <div className="flex items-center">
         <div className="w-25">
           <img src={current?.icon} alt="sun" />
         </div>
-        <span className="block text-9xl">
+        <span className="block text-6xl font-bold md:text-9xl">
           {`${current?.temperature}°`}
         </span>
       </div>

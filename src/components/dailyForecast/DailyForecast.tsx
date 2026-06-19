@@ -9,7 +9,7 @@ export default function DailyForecast() {
   return (
     <div className="mt-10">
       <h4 className="font-bold mb-7">Daily forecast</h4>
-      <div className="flex gap-3 text-center">
+      <div className="grid grid-cols-3 md:flex gap-3 text-center mb-4 md:mb-0">
         {daily.map((card: IDaily, i: number) => (
           <Card key={i} className="flex-1 border bg-neutral-700">
             <CardHeader className="-m-2">
