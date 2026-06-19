@@ -1,7 +1,12 @@
 import { useWeatherViewModel } from "@/hooks/useWeatherViewModel";
+import WeatherHeroCardLoading from "../loading/WeatherHeroCardLoading";
 
 export default function WeatherHeroCard() {
-  const { current } = useWeatherViewModel();
+  const { current, isLoading } = useWeatherViewModel();
+
+  if (isLoading || !current) {
+    return <WeatherHeroCardLoading />;
+  }
 
   return (
     <div className={`bg-[url(@/assets/bg-today-large.svg)] bg-cover bg-no-repeat rounded-lg flex items-center justify-center md:justify-between md:flex-row px-15 min-h-65 flex-col`}>
